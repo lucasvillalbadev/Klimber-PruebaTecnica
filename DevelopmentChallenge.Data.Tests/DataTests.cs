@@ -30,14 +30,45 @@ namespace DevelopmentChallenge.Data.Tests
                 FormasGeometricas.Imprimir(new List<FormaGeometrica>(), Enums.Idioma.Italiano));
         }
 
-        [TestCase]
-        public void TestResumenListaConUnCuadrado()
+        [TestCase(TipoFormaGeometrica.Circulo)]
+        [TestCase(TipoFormaGeometrica.Rectangulo)]
+        [TestCase(TipoFormaGeometrica.Trapecio)]
+        [TestCase(TipoFormaGeometrica.TrianguloEquilatero)]
+        [TestCase(TipoFormaGeometrica.Cuadrado)]
+        public void TestResumenListaConUnaForma(TipoFormaGeometrica forma)
         {
-            var cuadrados = new List<FormaGeometrica> {new Cuadrado(5)};
+            var formas = new List<FormaGeometrica>();
+            string resultadoEsperado = "";
+            switch (forma)
+            {
+                case TipoFormaGeometrica.Cuadrado:
+                    formas.Add(new Cuadrado(5));
+                    resultadoEsperado = "<h1>Reporte de formas</h1>1 Cuadrado | Area 25 | Perimetro 20 <br/>TOTAL:<br/>1 formas Perimetro 20 Area 25";
+                    break;
+                case TipoFormaGeometrica.TrianguloEquilatero:
+                    formas.Add(new TrianguloEquilatero(5));
+                    resultadoEsperado = "<h1>Reporte de formas</h1>1 Triángulo | Area 10,83 | Perimetro 15 <br/>TOTAL:<br/>1 formas Perimetro 15 Area 10,83";
+                    break;
+                case TipoFormaGeometrica.Circulo:
+                    formas.Add(new Circulo(5));
+                    resultadoEsperado = "<h1>Reporte de formas</h1>1 Círculo | Area 19,63 | Perimetro 15,71 <br/>TOTAL:<br/>1 formas Perimetro 15,71 Area 19,63";
+                    break;
+                case TipoFormaGeometrica.Trapecio:
+                    formas.Add(new Trapecio(2, 4, 3, 2));
+                    resultadoEsperado = "<h1>Reporte de formas</h1>1 Trapecio | Area 6 | Perimetro 12 <br/>TOTAL:<br/>1 formas Perimetro 12 Area 6";
+                    break;
+                case TipoFormaGeometrica.Rectangulo:
+                    formas.Add(new Rectangulo(2, 4));
+                    resultadoEsperado = "<h1>Reporte de formas</h1>1 Rectángulo | Area 8 | Perimetro 12 <br/>TOTAL:<br/>1 formas Perimetro 12 Area 8";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(@"Forma desconocida");
+                    break;
+            }
 
-            var resumen = FormasGeometricas.Imprimir(cuadrados, Enums.Idioma.Castellano);
+            var resumen = FormasGeometricas.Imprimir(formas, Enums.Idioma.Castellano);
             //Se cambio "Reporte de Formas" a "Reporte de formas" para que coincida con el mismo formato en inglés
-            Assert.AreEqual("<h1>Reporte de formas</h1>1 Cuadrado | Area 25 | Perimetro 20 <br/>TOTAL:<br/>1 formas Perimetro 20 Area 25", resumen);
+            Assert.AreEqual(resultadoEsperado, resumen);
         }
 
         [TestCase]
